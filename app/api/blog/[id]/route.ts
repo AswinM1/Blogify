@@ -1,15 +1,13 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { connectDB } from '../../../connect/db'; // Adjust if needed
-import Blog from '../../model/Blog';      // Adjust if needed
+import { connectDB } from '../../../connect/db'; // Adjust path if necessary
+import Blog from '../../model/Blog';              // Adjust path if necessary
 
-export async function GET(
-  req: NextRequest,
-  { params }: { params: { id: string } }
-) {
+export async function GET(req: NextRequest, context: { params: { id: string } }) {
   try {
     await connectDB();
 
-    const blog = await Blog.findById(params.id);
+    const { id } = context.params;
+    const blog = await Blog.findById(id);
 
     if (!blog) {
       return NextResponse.json({ message: 'Blog not found' }, { status: 404 });
